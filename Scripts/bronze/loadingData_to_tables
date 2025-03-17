@@ -2,6 +2,11 @@
 Loading the data with bulk insert we are Storing the query in stored procedure and also used the print state ments to debug the values 
 and we uses the to calculate the time taken by each file to load the data and also calculated batch time to 
 and used try and catch statments in procdure and we can handle error with catch block
+
+use 
+   exec bronze.load_bronze;
+to run the store procedure
+
 */
 
 
