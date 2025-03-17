@@ -1,0 +1,132 @@
+/*
+Loading the data with bulk insert we are Storing the query in stored procedure and also used the print state ments to debug the values 
+and we uses the to calculate the time taken by each file to load the data and also calculated batch time to 
+and used try and catch statments in procdure and we can handle error with catch block
+*/
+
+
+
+-- loading data into tables uding bulk insert
+
+-- Creating Stored Procedure 
+create or Alter procedure bronze.load_bronze 
+as
+Begin
+	declare @start_batch_time datetime ,@end_batch_time datetime
+	begin try 
+		declare @start_time datetime , @end_time datetime
+		print '================================================'
+		print 'Loading the Bronze Layer'
+		print '================================================'
+		set @start_batch_time = GETDATE()
+		print '-------------------------------'
+		print 'Loading the Source_crm'
+		print '-------------------------------'
+
+		set @start_time = GETDATE()
+		print '>>>  truncateing the data cust_info'
+			truncate table bronze.crm_cust_info;
+			print '>>>  Inserting data cust_info'
+			bulk insert bronze.crm_cust_info
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_crm\cust_info.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+		print '>>>  Truncateing the Product_info';
+		set @start_time = GETDATE()
+			truncate table bronze.crm_prd_info;
+			print '>>>  Inserting Into prd_info' 
+			bulk insert bronze.crm_prd_info
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_crm\prd_info.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+		print '>>>  Truncateing the Sales_details' 
+		set @start_time = GETDATE()
+			truncate table bronze.crm_sales_details;
+			print '>>>  Inserting the sales_details'
+			bulk insert bronze.crm_sales_details
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_crm\sales_details.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+
+		print '-------------------------------'
+		print 'Loading sourcer.erp'
+		print '-------------------------------'
+		print '>>> Truncateing the cust_az12'
+		set @start_time = GETDATE()
+			truncate table bronze.erp_cust_az12;
+			print '>>> Inserting cust_az12'
+			bulk insert bronze.erp_cust_az12
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_erp\cust_az12.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+		print '>>> Truncate loc_a101'
+		set @start_time = GETDATE()
+			truncate table bronze.erp_loc_a101;
+			print '>>>  Inserting loc_a101'
+			bulk insert bronze.erp_loc_a101
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_erp\loc_a101.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+		print '>>> Truncateing px_cat_g1v2'
+		set @start_time = GETDATE()
+			truncate table bronze.erp_px_cat_g1v2;
+			print '>>>  Inserting Px_cat_g1v2'
+			bulk insert bronze.erp_px_cat_g1v2
+			from 'C:\Users\gouth\Desktop\sql-data-warehouse-project-main\datasets\source_erp\px_cat_g1v2.csv'
+			with (
+			firstrow = 2,
+			fieldterminator = ',',
+			tablock
+			);
+		set @end_time = GETDATE()
+		print '---------------'
+		print'>> Time Taken  : ' + cast(datediff(second,@start_time,@end_time) as nvarchar) + ' seconds';
+		print '---------------'
+		set @end_batch_time = GETDATE()
+		print '============================'
+		print '---> Total Time for Batch : '+cast(dateDiff(second,@start_batch_time,@end_batch_time) as nvarchar)+' Seconds';
+		print '============================'
+	end try
+	begin catch
+		print '==================================='
+		print 'Error Message'
+		print 'Error message  : ' + cast(Error_message() as nvarchar);
+		print 'Error message  : ' + cast(error_state() as nvarchar);
+		print '==================================='
+	end catch
+end
