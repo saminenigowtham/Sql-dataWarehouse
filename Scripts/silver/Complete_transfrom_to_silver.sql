@@ -5,7 +5,7 @@
   4. normailization and standaization of the data eg : M,F --> Male,Female
   5. stored all this silver.load_silver procedure 
   6. And also used time to calcuate the time 
-
+  7. added an extra coloumn for all table 'DWH_created_time' 
      to use the code run this
       exec silver.load_silver;
 */
