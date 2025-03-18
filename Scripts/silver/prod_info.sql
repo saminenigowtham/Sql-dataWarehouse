@@ -17,7 +17,7 @@ create table silver.crm_prd_info(
 -- inserting into silver.crm_prd_info
 -- truncate table then inserting 
 
-truncate table silver.crm_cust_info;
+truncate table silver.crm_prd_info;
 insert into silver.crm_prd_info(
 	prd_id ,
 	cat_id ,
