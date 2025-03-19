@@ -23,7 +23,7 @@ GO
 
 CREATE VIEW gold.dim_customers AS
 SELECT
-    ROW_NUMBER() OVER (ORDER BY cst_id) AS customer_key, -- Surrogate key
+    ROW_NUMBER() OVER (ORDER BY cst_id) AS dim_customer_key, -- Surrogate key
     ci.cst_id                          AS customer_id,
     ci.cst_key                         AS customer_number,
     ci.cst_firstname                   AS first_name,
@@ -52,7 +52,7 @@ GO
 
 CREATE VIEW gold.dim_products AS
 SELECT
-    ROW_NUMBER() OVER (ORDER BY pn.prd_start_dt, pn.prd_key) AS product_key, -- Surrogate key
+    ROW_NUMBER() OVER (ORDER BY pn.prd_start_dt, pn.prd_key) AS dim_product_key, -- Surrogate key
     pn.prd_id       AS product_id,
     pn.prd_key      AS product_number,
     pn.prd_nm       AS product_name,
